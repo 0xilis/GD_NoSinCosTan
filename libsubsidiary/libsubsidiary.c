@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2023 Snoolie K / 0xilis. All rights reserved.
+ *
+ * This document is the property of Snoolie K / 0xilis.
+ * It is considered confidential and proprietary.
+ *
+ * This document may not be reproduced or transmitted in any form,
+ * in whole or in part, without the express written permission of
+ * Snoolie K / 0xilis.
+*/
+
+/*
+ * Note that everything other than SubsidiaryHookFunction has been redacted from this source.
+*/
+
 #include <objc/runtime.h>
 #include "libsubsidiary.h"
 #include <mach-o/dyld.h>
@@ -17,21 +32,6 @@ typedef struct mach_header mach_header_t;
 typedef struct segment_command segment_command_t;
 typedef struct section section_t;
 #endif
-
-/*
- * Copyright (C) 2023 Snoolie K / 0xilis. All rights reserved.
- *
- * This document is the property of Snoolie K / 0xilis.
- * It is considered confidential and proprietary.
- *
- * This document may not be reproduced or transmitted in any form,
- * in whole or in part, without the express written permission of
- * Snoolie K / 0xilis.
-*/
-
-/*
- * Note that everything other than SubsidiaryHookFunction has been redacted from this source.
-*/
 
 void SubsidiaryGenericHookMethod(Class cls, SEL name, IMP imp, IMP *orig) {
  Method hookMethod = class_getInstanceMethod(cls, name);
