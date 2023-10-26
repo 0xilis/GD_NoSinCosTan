@@ -34,26 +34,9 @@ typedef struct section section_t;
 #endif
 
 void SubsidiaryGenericHookMethod(Class cls, SEL name, IMP imp, IMP *orig) {
- Method hookMethod = class_getInstanceMethod(cls, name);
- if (!hookMethod) {
-  printf("libsubsidiary error\n");
-  return;
- }
- unsigned int numberOfMethods;
- Method *methods = class_copyMethodList(cls, &numberOfMethods);
- for (int i = 0; i < numberOfMethods; i++) {
-  Method m = methods[i];
-  if (method_getName(m) == name) {
-   /* the method is in this class so we can safely replace the method */
-   *orig = class_replaceMethod(cls, name, imp, method_getTypeEncoding(hookMethod));
-   free(methods);
-   return;
-  }
- }
- /* the method is in the superclass, add the method instead to not override superclass and get IMP of orig */
- *orig = method_getImplementation(hookMethod);
- class_addMethod(cls, name, imp, method_getTypeEncoding(hookMethod));
- free(methods);
+ Method meth = class_getInstanceMethod(cls, name);
+ if (!meth) { return; }
+ *orig = class_replaceMethod(cls, name, imp, method_getTypeEncoding(meth));
 }
 
 subsid_err SubsidiaryGenericHookMethodWithError(Class cls, SEL name, IMP imp, IMP *orig) {
@@ -64,21 +47,7 @@ subsid_err SubsidiaryGenericHookMethodWithError(Class cls, SEL name, IMP imp, IM
  if (!hookMethod) {
   return Subsid_NoSel;
  }
- unsigned int numberOfMethods;
- Method *methods = class_copyMethodList(cls, &numberOfMethods);
- for (int i = 0; i < numberOfMethods; i++) {
-  Method m = methods[i];
-  if (method_getName(m) == name) {
-   /* the method is in this class so we can safely replace the method */
-   *orig = class_replaceMethod(cls, name, imp, method_getTypeEncoding(hookMethod));
-   free(methods);
-   return Subsid_Succeed;
-  }
- }
- /* the method is in the superclass, add the method instead to not override superclass and get IMP of orig */
- *orig = method_getImplementation(hookMethod);
- class_addMethod(cls, name, imp, method_getTypeEncoding(hookMethod));
- free(methods);
+ *orig = class_replaceMethod(cls, name, imp, method_getTypeEncoding(meth));
  return Subsid_Succeed;
 }
 
