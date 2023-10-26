@@ -34,9 +34,9 @@ typedef struct section section_t;
 #endif
 
 void SubsidiaryGenericHookMethod(Class cls, SEL name, IMP imp, IMP *orig) {
- Method meth = class_getInstanceMethod(cls, name);
- if (!meth) { return; }
- *orig = class_replaceMethod(cls, name, imp, method_getTypeEncoding(meth));
+ Method hookMethod = class_getInstanceMethod(cls, name);
+ if (!hookMethod) { return; }
+ *orig = class_replaceMethod(cls, name, imp, method_getTypeEncoding(hookMethod));
 }
 
 subsid_err SubsidiaryGenericHookMethodWithError(Class cls, SEL name, IMP imp, IMP *orig) {
